@@ -6,13 +6,12 @@ keeps runout as a separate raw file, and validates every split before delivering
 
 ## Install in Claude
 
-The skill is just a folder: `SKILL.md` at its root plus `scripts/`. The same folder works
-in both Claude.ai and Claude Code — no build step, no packaging beyond a ZIP.
+The skill is just a folder: `SKILL.md` at its root plus `scripts/`. Claude.ai takes that
+folder as a ZIP upload; Claude Code reads it straight from disk. No build step either way.
 
-> This repo is **private**. The clone commands below work for you and anyone you grant
-> access to; others will get a 404. Make it public first
-> (`gh repo edit andrewmarks9/discogs-vinyl-splitter --visibility public`) if you want to
-> share it.
+> **Private repo:** if a clone returns 404, you don't have access yet — ask the owner for
+> it, or make the repo public with
+> `gh repo edit andrewmarks9/discogs-vinyl-splitter --visibility public`.
 
 ### Claude.ai (web app)
 
@@ -25,7 +24,7 @@ in both Claude.ai and Claude Code — no build step, no packaging beyond a ZIP.
 
    ```bash
    git clone https://github.com/andrewmarks9/discogs-vinyl-splitter
-   zip -r discogs-vinyl-splitter.zip discogs-vinyl-splitter
+   zip -r discogs-vinyl-splitter.zip discogs-vinyl-splitter -x '*/.git/*'
    ```
 
    The folder name should stay `discogs-vinyl-splitter` to match the `name` field in
