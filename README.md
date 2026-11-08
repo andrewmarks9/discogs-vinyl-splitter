@@ -9,9 +9,6 @@ keeps runout as a separate raw file, and validates every split before delivering
 The skill is just a folder: `SKILL.md` at its root plus `scripts/`. Claude.ai takes that
 folder as a ZIP upload; Claude Code reads it straight from disk. No build step either way.
 
-> **Private repo:** if a clone returns 404, you don't have access yet — ask the owner for
-> it, or make the repo public with
-> `gh repo edit andrewmarks9/discogs-vinyl-splitter --visibility public`.
 
 ### Claude.ai (web app)
 
