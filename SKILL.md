@@ -12,8 +12,8 @@ session's workflow.
 
 ## Step 1 — Fetch the Discogs track list
 
-1. `web_fetch_urls` (or `gsk crawl`) the release URL. Discogs pages render server-side;
-   a plain fetch returns the tracklist.
+1. Fetch the release URL with `gsk crawler <url>` (or any server-side fetch). Discogs
+   pages render server-side, so a plain fetch returns the tracklist.
 2. Extract per side: track positions (A1, A2, B1...), titles, nominal durations, total
    nominal runtime. Pick the side matching the user's file (position prefixes or runtime).
 3. Note the expected **track count for that side** — this is a hard assertion later.
@@ -80,10 +80,13 @@ For track k with music from `o_k` to `e_k` (from the analyzer):
 
 ## Step 5 — Deliver
 
-- Deliver audio + validation PNGs via `genspark_deliver_files` (batch, one call).
-- If the user wants cloud archiving: `gsk aidrive upload --local_file <f>
-  --upload_path "/<Artist> - <Title> (split WAV)/<name>.wav" --confirmed true` per file,
-  then `gsk aidrive ls` the folder to verify count and byte sizes.
+- Deliver audio + validation PNGs as attachments from the working directory. For a
+  shareable link instead of a chat attachment, `gsk upload <file>` returns a file
+  wrapper URL.
+- If the user wants cloud archiving, upload each file with:
+  `gsk aidrive upload --local_file <f> --upload_path "/<Artist> - <Title> (split WAV)/<name>.wav" --confirmed true`
+  then verify with `gsk aidrive ls "<Artist> - <Title> (split WAV)"` — check item count
+  and byte sizes against the local files.
 - Report: per-track measured vs nominal durations, split points on the source
   timeline, what was removed, runout kept/raw, and every gate result.
 

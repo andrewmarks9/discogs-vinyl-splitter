@@ -108,8 +108,12 @@ for the missing piece instead of guessing.
    - *Format*: default output is WAV, source sample rate, 16-bit stereo.
 5. The agent runs the whole flow: fetch tracklist → detect boundaries → split →
    decrackle/denoise → validate (clipping, fades, edges, overlap, coverage) →
-   deliver files + validation spectrograms. It can also archive to your AI Drive in a
-   folder named `<Artist> - <Title> (split WAV)` — just ask.
+   deliver files + validation spectrograms.
+
+**Optional cloud archive:** if the `gsk` CLI is available in the environment, the output
+can also be uploaded to a Genspark AI Drive folder named
+`<Artist> - <Title> (split WAV)` — just ask. Without `gsk`, skip this step; everything
+else runs on plain Python and `ffmpeg`.
 
 ## Manual CLI usage
 
