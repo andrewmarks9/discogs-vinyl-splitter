@@ -4,6 +4,77 @@ Split a captured vinyl side into tracks using a Discogs release as ground truth.
 Detects real song boundaries in the audio (rumble-immune), removes turntable noise,
 keeps runout as a separate raw file, and validates every split before delivering.
 
+## Install in Claude
+
+The skill is just a folder: `SKILL.md` at its root plus `scripts/`. The same folder works
+in both Claude.ai and Claude Code — no build step, no packaging beyond a ZIP.
+
+> This repo is **private**. The clone commands below work for you and anyone you grant
+> access to; others will get a 404. Make it public first
+> (`gh repo edit andrewmarks9/discogs-vinyl-splitter --visibility public`) if you want to
+> share it.
+
+### Claude.ai (web app)
+
+1. Turn on code execution first: **Settings → Capabilities → Code execution and file
+   creation**. Skills that run scripts need it; without it they show greyed out.
+2. Open **[Customize → Skills](https://claude.ai/customize/skills)**.
+3. Click **+**, then **+ Create skill**, and choose **Upload a skill**.
+4. Upload a ZIP whose **top level is the skill folder** — `SKILL.md` must sit at the
+   folder root, not at the ZIP root:
+
+   ```bash
+   git clone https://github.com/andrewmarks9/discogs-vinyl-splitter
+   zip -r discogs-vinyl-splitter.zip discogs-vinyl-splitter
+   ```
+
+   The folder name should stay `discogs-vinyl-splitter` to match the `name` field in
+   `SKILL.md` frontmatter.
+5. Confirm it appears in your list and is toggled **on**. Claude then picks it up on its
+   own whenever a message matches the trigger below, or when you name it explicitly.
+
+On **Team** and **Enterprise** plans an owner must first enable **Skills** and **Code
+execution and file creation** in **Organization settings → Plugins & skills**; members may
+also need **User-created skills** enabled before they can upload their own.
+
+### Claude Code (terminal)
+
+Clone the folder into a skills directory — Claude Code reads `SKILL.md` from there
+directly:
+
+```bash
+# personal: loads in every project on this machine
+git clone https://github.com/andrewmarks9/discogs-vinyl-splitter \
+  ~/.claude/skills/discogs-vinyl-splitter
+
+# or project-scoped: commit it so everyone working in the repo gets it
+git clone https://github.com/andrewmarks9/discogs-vinyl-splitter \
+  .claude/skills/discogs-vinyl-splitter
+```
+
+Then:
+
+- `/skills` lists it; `/discogs-vinyl-splitter` invokes it directly.
+- It also loads automatically when a message carries a Discogs release URL plus a rip.
+- `SKILL.md` edits are picked up live mid-session. If you created `~/.claude/skills/`
+  **after** the session started, run `/reload-skills` once so it gets watched.
+
+If you already uploaded it in Claude.ai, Claude Code (v2.1.273+) syncs your account's
+skills automatically and `/skills` lists them under **claude.ai sync** — no clone needed.
+Note that `~/.claude/skills/` is machine-local: **Cowork and cloud sessions don't read
+it**, so for those use the Claude.ai upload instead of the clone.
+
+### Runtime dependencies
+
+The skill shells out to Python with `numpy`, `soundfile`, `scipy`, `matplotlib` and
+`ffmpeg` — see [Requirements](#requirements).
+
+- **Claude Code** runs on your machine, so install them there once.
+- **Claude.ai** runs in a container that starts without them, and the skill does not
+  install packages on its own. The first `analyze_structure.py` call will fail until they
+  exist, so either ask Claude to install them up front, or run the splitter locally with
+  the CLI flow below.
+
 ## Trigger phrases
 
 The skill activates when a message contains **both** a Discogs release URL
